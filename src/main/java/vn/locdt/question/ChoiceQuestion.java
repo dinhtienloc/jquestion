@@ -7,6 +7,7 @@ import vn.locdt.item.Choice;
 import vn.locdt.item.Selector;
 import vn.locdt.result.ChoiceResultHandler;
 import vn.locdt.result.InputResultHandler;
+import vn.locdt.result.ResultHandler;
 import vn.locdt.util.ConsoleUtils;
 import vn.locdt.util.DetectArrowKey;
 import vn.locdt.reader.NonBlockConsoleReader;
@@ -17,12 +18,31 @@ import java.util.List;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class ChoiceQuestion extends Question<Choice> {
-    public ChoiceQuestion(String title, String name) {
+    public ChoiceQuestion(String title, String name, boolean isPrintedResult) {
+        super(isPrintedResult);
+        this.item = new Choice(title, name);
+    }
+
+    public ChoiceQuestion(String title, String name) throws IOException {
         super();
         this.item = new Choice(title, name);
     }
 
-    public ChoiceQuestion addSelector(String value) {
+    public ChoiceQuestion(String title, String name, List<Selector> selectors, boolean isPrintedResult) throws IOException {
+        super(isPrintedResult);
+        this.item.setChoiceList(selectors);
+        this.isPrintedResult = isPrintedResult;
+        prompt();
+    }
+
+    public ChoiceQuestion(String title, String name, List<Selector> selectors) throws IOException {
+        super();
+        this.item.setChoiceList(selectors);
+        this.isPrintedResult = isPrintedResult;
+        prompt();
+    }
+
+    public ChoiceQuestion addSelector(String value)  {
         item.addSelector(new Selector(value));
         return this;
     }
@@ -41,10 +61,11 @@ public class ChoiceQuestion extends Question<Choice> {
     }
 
     @Override
-    public void prompt() throws IOException {
+    public ResultHandler prompt() throws IOException {
         System.out.println(ansi().fg(Ansi.Color.DEFAULT).a(this));
+
         if (item.getChoiceList().size() == 0)
-            return;
+            return new ChoiceResultHandler(item);
 
         NonBlockConsoleReader.start(event -> {
             int charCode = (int)event.getAddedChar();
@@ -52,26 +73,24 @@ public class ChoiceQuestion extends Question<Choice> {
 
             if (charCode == CharConstants.CHAR_ENTER) {
                 item.setResultHandler(new ChoiceResultHandler(item, item.getActivedSelector().getValue()));
-                ConsoleUtils.printResult(this);
+                if (this.isPrintedResult) ConsoleUtils.printResult(this);
                 event.cancelLoop();
             }
             else if (charCode == 27 && !DetectArrowKey.detecting) {
                 DetectArrowKey.detect();
             }
-            else if (charCode == CharConstants.CHAR_ENTER) {
-
-            }
             else if (DetectArrowKey.detecting) {
                 CharConstants.ArrowKey arrowKey = DetectArrowKey.update(charCode);
                 if (arrowKey != null) {
                     changeActiveSelector(arrowKey);
-
                 }
             }
-//                System.out.println("buffer: " + event.getCurrentBuffer());
-            if(event.getAddedChar() == CharConstants.CHAR_CTRL_D)
+            else if(event.getAddedChar() == CharConstants.CHAR_CTRL_D)
                 event.cancelLoop();
         });
+
+        ChoiceResultHandler resultHandler = item.getResultHandler();
+        return resultHandler == null ? new ChoiceResultHandler(item) : resultHandler;
     }
 
     private void changeActiveSelector(CharConstants.ArrowKey arrowKey) {

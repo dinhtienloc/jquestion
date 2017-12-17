@@ -7,6 +7,7 @@ public class ResultHandler {
     protected Item sourceItem;
     protected String value;
 
+
     public ResultHandler(Item sourceItem, String value) {
         this.sourceItem = sourceItem;
         this.value = value;
@@ -22,5 +23,10 @@ public class ResultHandler {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "{\""+ sourceItem.getName() + ":" + "\"" + value + "\"}";
     }
 }
