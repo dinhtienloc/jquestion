@@ -1,17 +1,19 @@
 package vn.locdt.util;
 
+import vn.locdt.constant.CharConstants;
+
 public class DetectArrowKey {
-    public static boolean detectArrowKey = false; //1: Up, 2: Down, 3: Left, 4: Right
+    public static boolean detecting = false; //1: Up, 2: Down, 3: Left, 4: Right
     private static int step = -1;
     private static int[] arrowProcess = new int[]{27, 91};
 
     public static void detect() {
-        DetectArrowKey.detectArrowKey = true;
+        DetectArrowKey.detecting = true;
         DetectArrowKey.step = 0;
     }
 
     public static void reset() {
-        DetectArrowKey.detectArrowKey = false;
+        DetectArrowKey.detecting = false;
         DetectArrowKey.step = -1;
     }
 

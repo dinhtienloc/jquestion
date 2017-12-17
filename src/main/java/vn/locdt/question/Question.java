@@ -1,20 +1,22 @@
 package vn.locdt.question;
 
 import vn.locdt.item.Item;
-import vn.locdt.listener.ConsoleListener;
 import vn.locdt.result.ResultHandler;
 
 import java.io.IOException;
 
 public abstract class Question<T extends Item> {
-    private ConsoleListener listener;
     protected T item;
 
     public Question() {
     }
 
-    public void addConsoleListener(ConsoleListener listener) {
-        this.listener = listener;
+    public T getItem() {
+        return item;
+    }
+
+    public void setItem(T item) {
+        this.item = item;
     }
 
     public abstract void prompt() throws IOException;

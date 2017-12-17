@@ -4,6 +4,7 @@ import vn.locdt.JQuestion;
 import vn.locdt.item.Input;
 import vn.locdt.item.Item;
 import vn.locdt.result.InputResultHandler;
+import vn.locdt.util.ConsoleUtils;
 
 import java.io.IOException;
 
@@ -23,6 +24,7 @@ public class InputQuestion extends Question<Input> {
         //TODO: process prompt here
         String result = JQuestion.getConsole().readLine(item.getTitle());
         item.setResultHandler(new InputResultHandler(item, result));
+        ConsoleUtils.printResult(this);
     }
 
 }

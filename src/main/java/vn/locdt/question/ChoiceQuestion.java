@@ -1,18 +1,20 @@
 package vn.locdt.question;
 
+import org.fusesource.jansi.Ansi;
+import vn.locdt.constant.CharConstants;
 import vn.locdt.eception.EmptySelectorListException;
-import vn.locdt.event.CharacterInputEvent;
-import vn.locdt.event.ChoiceChangeEvent;
 import vn.locdt.item.Choice;
 import vn.locdt.item.Selector;
-import vn.locdt.util.CharConstants;
+import vn.locdt.result.ChoiceResultHandler;
+import vn.locdt.result.InputResultHandler;
+import vn.locdt.util.ConsoleUtils;
 import vn.locdt.util.DetectArrowKey;
-import vn.locdt.util.NonBlockConsoleReader;
+import vn.locdt.reader.NonBlockConsoleReader;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class ChoiceQuestion extends Question<Choice> {
     public ChoiceQuestion(String title, String name) {
@@ -40,65 +42,72 @@ public class ChoiceQuestion extends Question<Choice> {
 
     @Override
     public void prompt() throws IOException {
-        try {
-            showChoiceList();
-            NonBlockConsoleReader.start(event -> {
-                int charCode = (int)event.getAddedChar();
-//                System.out.println(charCode);
-                if (charCode == 27 && !DetectArrowKey.detectArrowKey) {
-                    DetectArrowKey.detect();
-                }
-                else if (DetectArrowKey.detectArrowKey) {
-                    CharConstants.ArrowKey arrowKey = DetectArrowKey.update(charCode);
-                    if (arrowKey != null) {
-                        changeActiveSelector(arrowKey);
+        System.out.println(ansi().fg(Ansi.Color.DEFAULT).a(this));
+        if (item.getChoiceList().size() == 0)
+            return;
 
-                    }
+        NonBlockConsoleReader.start(event -> {
+            int charCode = (int)event.getAddedChar();
+//                System.out.println(charCode);
+
+            if (charCode == CharConstants.CHAR_ENTER) {
+                item.setResultHandler(new ChoiceResultHandler(item, item.getActivedSelector().getValue()));
+                ConsoleUtils.printResult(this);
+                event.cancelLoop();
+            }
+            else if (charCode == 27 && !DetectArrowKey.detecting) {
+                DetectArrowKey.detect();
+            }
+            else if (charCode == CharConstants.CHAR_ENTER) {
+
+            }
+            else if (DetectArrowKey.detecting) {
+                CharConstants.ArrowKey arrowKey = DetectArrowKey.update(charCode);
+                if (arrowKey != null) {
+                    changeActiveSelector(arrowKey);
+
                 }
+            }
 //                System.out.println("buffer: " + event.getCurrentBuffer());
-                if(event.getAddedChar() == CharConstants.CHAR_CTRL_D)
-                    event.cancelLoop();
-            });
-        } catch (EmptySelectorListException e) {
-            e.printStackTrace();
-        }
+            if(event.getAddedChar() == CharConstants.CHAR_CTRL_D)
+                event.cancelLoop();
+        });
     }
 
     private void changeActiveSelector(CharConstants.ArrowKey arrowKey) {
-        try {
-            int cursor;
-            List<Selector> selectors = item.getChoiceList();
-            switch (arrowKey) {
-                case UP:
-                    cursor = item.indexOfActivedSelector();
-                    if (cursor > 0)
-                        item.setActivedSelector(selectors.get(cursor - 1));
-                    showChoiceList();
-                    break;
-                case DOWN:
-                    cursor = item.indexOfActivedSelector();
-                    if (cursor < selectors.size() - 1)
-                        item.setActivedSelector(selectors.get(cursor + 1));
-                    showChoiceList();
-                    break;
-            }
-        } catch (EmptySelectorListException e) {
-            e.printStackTrace();
+        int cursor;
+        List<Selector> selectors = item.getChoiceList();
+        switch (arrowKey) {
+            case UP:
+                cursor = item.indexOfActivedSelector();
+                if (cursor > 0)
+                    item.setActivedSelector(selectors.get(cursor - 1));
+                ConsoleUtils.rerenderChoiceQuestion(this);
+                break;
+            case DOWN:
+                cursor = item.indexOfActivedSelector();
+                if (cursor < selectors.size() - 1)
+                    item.setActivedSelector(selectors.get(cursor + 1));
+                ConsoleUtils.rerenderChoiceQuestion(this);
+                break;
         }
     }
-    private void showChoiceList() throws EmptySelectorListException {
-        System.out.println(item.getTitle());
+
+    @Override
+    public String toString() {
+        String str = "";
+        str += item.getTitle() + "\n";
         List<Selector> selectors = item.getChoiceList();
         if (selectors.size() == 0)
-            throw new EmptySelectorListException("Choice list is empty");
+            return str;
 
         if (item.getActivedSelector() == null)
             item.setActivedSelector(item.getChoiceList().get(0));
 
         for (Selector selector : selectors) {
-            System.out.println(selector);
+            str += ConsoleUtils.printSelector(selector) + "\n";
         }
+
+        return str;
     }
-
-
 }

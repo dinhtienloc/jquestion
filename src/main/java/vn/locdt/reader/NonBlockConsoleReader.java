@@ -1,7 +1,9 @@
-package vn.locdt.util;
+package vn.locdt.reader;
 
+import vn.locdt.constant.CharConstants;
 import vn.locdt.event.CharacterInputEvent;
 import vn.locdt.question.Question;
+import vn.locdt.util.RawConsoleInput;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;

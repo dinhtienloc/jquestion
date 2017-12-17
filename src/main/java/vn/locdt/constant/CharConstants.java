@@ -1,4 +1,4 @@
-package vn.locdt.util;
+package vn.locdt.constant;
 
 /**
  * @author Kantenkugel (Michael Ritter)

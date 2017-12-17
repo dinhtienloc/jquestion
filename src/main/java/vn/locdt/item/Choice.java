@@ -1,11 +1,13 @@
 package vn.locdt.item;
 
+import vn.locdt.result.ChoiceResultHandler;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Choice extends Item {
-    private static String activedPrefix = "> ";
-    private static String deactivedPrefix = "  ";
+public class Choice extends Item<ChoiceResultHandler> {
+    public static String activedPrefix = "> ";
+    public static String deactivedPrefix = "  ";
     private List<Selector> choiceList;
     private Selector activedSelector;
 
@@ -45,10 +47,12 @@ public class Choice extends Item {
         if (selector != null) {
             selector.setPrefix(deactivedPrefix);
             choiceList.add(selector);
+            this.setRenderHeight(choiceList.size() + 2);
         }
     }
 
     public void addSelectorList(List<Selector> selectorList) {
         choiceList.addAll(selectorList);
+        this.setRenderHeight(choiceList.size() + 2);
     }
 }

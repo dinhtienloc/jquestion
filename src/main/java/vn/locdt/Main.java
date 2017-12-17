@@ -2,6 +2,7 @@ package vn.locdt;
 
 import vn.locdt.question.ChoiceQuestion;
 import vn.locdt.question.InputQuestion;
+import vn.locdt.util.ConsoleUtils;
 
 import java.io.IOException;
 
@@ -11,7 +12,6 @@ public class Main {
             JQuestion.createConsole();
 
             String input = new InputQuestion("How old are you?", "age").getValue();
-            System.out.println("result: " + input);
 
             new ChoiceQuestion("Day la choice list", "eat")
                     .addSelector("an rau den khong?")

@@ -3,6 +3,7 @@ package vn.locdt.item;
 import vn.locdt.result.ResultHandler;
 
 public abstract class Item<T extends ResultHandler> {
+    private int renderHeight;
     protected String name;
     protected String value;
     protected String title;
@@ -14,6 +15,13 @@ public abstract class Item<T extends ResultHandler> {
         this.value = value;
     }
 
+    public int getRenderHeight() {
+        return renderHeight;
+    }
+
+    public void setRenderHeight(int renderHeight) {
+        this.renderHeight = renderHeight;
+    }
 
     public T getResultHandler() {
         return resultHandler;
