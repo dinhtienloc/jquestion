@@ -2,11 +2,10 @@ package vn.locdt.question;
 
 import org.fusesource.jansi.Ansi;
 import vn.locdt.constant.CharConstants;
-import vn.locdt.eception.AmbiguousAnswerException;
-import vn.locdt.item.Choice;
+import vn.locdt.exception.AmbiguousAnswerException;
 import vn.locdt.item.Selector;
 import vn.locdt.item.SingleChoice;
-import vn.locdt.result.Answer;
+import vn.locdt.answer.Answer;
 import vn.locdt.util.ConsoleUtils;
 import vn.locdt.util.DetectArrowKey;
 import vn.locdt.reader.NonBlockConsoleReader;

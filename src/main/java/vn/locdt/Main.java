@@ -2,8 +2,6 @@ package vn.locdt;
 
 import com.google.gson.Gson;
 import vn.locdt.question.SingleChoiceQuestion;
-import vn.locdt.question.InputQuestion;
-import vn.locdt.result.Answer;
 
 import java.io.IOException;
 import java.util.Map;

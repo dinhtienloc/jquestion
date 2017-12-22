@@ -1,9 +1,9 @@
 package vn.locdt.question;
 
 import vn.locdt.JQuestion;
-import vn.locdt.eception.AmbiguousAnswerException;
+import vn.locdt.exception.AmbiguousAnswerException;
 import vn.locdt.item.Input;
-import vn.locdt.result.Answer;
+import vn.locdt.answer.Answer;
 import vn.locdt.util.ConsoleUtils;
 
 import java.io.IOException;

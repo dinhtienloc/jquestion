@@ -1,7 +1,7 @@
 package vn.locdt.question;
 
 import vn.locdt.item.Item;
-import vn.locdt.result.Answer;
+import vn.locdt.answer.Answer;
 
 import java.io.IOException;
 

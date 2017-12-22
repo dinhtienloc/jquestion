@@ -1,4 +1,4 @@
-package vn.locdt.eception;
+package vn.locdt.exception;
 
 public class AmbiguousAnswerException extends Exception {
     public AmbiguousAnswerException(String message) {

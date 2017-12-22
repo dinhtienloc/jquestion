@@ -4,7 +4,7 @@ import jline.console.ConsoleReader;
 import vn.locdt.question.InputQuestion;
 import vn.locdt.question.Question;
 import vn.locdt.question.SingleChoiceQuestion;
-import vn.locdt.result.Answer;
+import vn.locdt.answer.Answer;
 
 import java.io.IOException;
 import java.util.*;

@@ -1,7 +1,6 @@
-package vn.locdt.result;
+package vn.locdt.answer;
 
-import vn.locdt.eception.AmbiguousAnswerException;
-import vn.locdt.item.Input;
+import vn.locdt.exception.AmbiguousAnswerException;
 import vn.locdt.item.Item;
 
 public class Answer {
