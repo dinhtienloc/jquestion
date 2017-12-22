@@ -1,11 +1,9 @@
 package vn.locdt.item;
 
-import vn.locdt.result.InputResultHandler;
-
-public class Input extends Item<InputResultHandler> {
+public class Input extends Item {
     public Input(String title, String name, String value) {
         super(title, name, value);
-        this.setRenderHeight(1);
+        this.setRenderHeight(2);
     }
 
     public Input(String title, String name) {

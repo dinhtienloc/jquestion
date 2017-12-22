@@ -15,26 +15,13 @@ import java.util.function.Consumer;
 public class NonBlockConsoleReader {
 
     public static void start(Consumer<CharacterInputEvent> consoleHandler) throws IOException {
-        loop(consoleHandler, new AtomicBoolean(true));
+        loop(consoleHandler, true);
     }
 
-    public static Runnable startAsync(Consumer<CharacterInputEvent> consoleHandler) throws IOException {
-        AtomicBoolean running = new AtomicBoolean(true);
-        new Thread(() -> {
-            try {
-                loop(consoleHandler, running);
-            } catch(IOException e) {
-                running.set(false);
-                e.printStackTrace();
-            }
-        }).start();
-        return () -> running.set(false);
-    }
-
-    static void loop(Consumer<CharacterInputEvent> consoleHandler, AtomicBoolean shouldRun) throws IOException {
+    static void loop(Consumer<CharacterInputEvent> consoleHandler, boolean shouldRun) throws IOException {
         int read;
         final StringBuilder b = new StringBuilder();
-        while(shouldRun.get()) {
+        while(shouldRun) {
             read = RawConsoleInput.read(true);
 //            System.out.println(read);
             if(read == -1)
@@ -48,7 +35,7 @@ public class NonBlockConsoleReader {
             CharacterInputEvent event = new CharacterInputEvent(b, (char) read);
             consoleHandler.accept(event);
             if(event.isShouldCancel())
-                shouldRun.set(false);
+                shouldRun = false;
         }
         resetConsoleMode();
     }

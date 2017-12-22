@@ -1,15 +1,17 @@
 package vn.locdt.question;
 
 import vn.locdt.item.Item;
-import vn.locdt.result.ResultHandler;
+import vn.locdt.result.Answer;
 
 import java.io.IOException;
 
 public abstract class Question<T extends Item> {
     protected T item;
-    protected boolean isPrintedResult = false;
+    protected boolean isPrintedResult = true;
+    protected Answer answer;
 
-    public Question() {}
+    public Question() {
+    }
 
     public Question(boolean isPrintedResult) {
         this.isPrintedResult = isPrintedResult;
@@ -31,14 +33,25 @@ public abstract class Question<T extends Item> {
         isPrintedResult = printedResult;
     }
 
-    public abstract ResultHandler prompt() throws IOException;
+    public abstract Answer prompt() throws IOException;
 
-    public String getValue() {
-        ResultHandler result = item.getResultHandler();
-        return result.getName() + ":" + result.getValue();
+    public Answer getAnswer() {
+        return this.answer;
     }
 
-    public ResultHandler result() {
-        return item.getResultHandler();
+    public String getAnswerAsJson() {
+        return answer.getName() + ":" + answer.getValue();
+    }
+
+    public String getAnswerValue() {
+        return answer.getValue();
+    }
+
+    public void setAnswer(Answer answer) {
+        this.answer = answer;
+    }
+
+    public void setAnswer(String value) {
+        this.answer.setValue(value);
     }
 }

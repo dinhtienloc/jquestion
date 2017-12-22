@@ -1,19 +1,26 @@
 package vn.locdt.item;
 
-import vn.locdt.result.ChoiceResultHandler;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class Choice extends Item<ChoiceResultHandler> {
+public abstract class Choice extends Item {
     public static String activedPrefix = "> ";
     public static String deactivedPrefix = "  ";
-    private List<Selector> choiceList;
-    private Selector activedSelector;
+    protected List<Selector> choiceList;
 
     public Choice(String title, String name) {
         super(title, name, "");
-        this.choiceList = new ArrayList<>();
+        choiceList = new ArrayList<>();
+    }
+
+    public Choice(String title, String name, String[] selectors) {
+        super(title, name, "");
+        choiceList = new ArrayList<>();
+        for (String s : selectors) {
+            choiceList.add(new Selector(s));
+        }
+        setRenderHeight(choiceList.size() + 2);
     }
 
     public List<Selector> getChoiceList() {
@@ -21,38 +28,34 @@ public class Choice extends Item<ChoiceResultHandler> {
     }
 
     public void setChoiceList(List<Selector> choiceList) {
-        this.choiceList = choiceList;
-    }
-
-    public Selector getActivedSelector() {
-        return activedSelector;
-    }
-
-    public void setActivedSelector(Selector activedSelector) {
-        if (this.activedSelector != null)
-            this.activedSelector.setPrefix(deactivedPrefix);
-
-        this.activedSelector = activedSelector;
-        activedSelector.setPrefix(activedPrefix);
-    }
-
-    public int indexOfActivedSelector() {
-        if (activedSelector == null || choiceList.size() == 0)
-            return -1;
-
-        return choiceList.indexOf(activedSelector);
+        choiceList = choiceList;
     }
 
     public void addSelector(Selector selector) {
         if (selector != null) {
             selector.setPrefix(deactivedPrefix);
             choiceList.add(selector);
-            this.setRenderHeight(choiceList.size() + 2);
+            setRenderHeight(choiceList.size() + 2);
         }
     }
 
-    public void addSelectorList(List<Selector> selectorList) {
-        choiceList.addAll(selectorList);
-        this.setRenderHeight(choiceList.size() + 2);
+    public void addSelector(String selector) {
+        if (selector != null) {
+            Selector newSelector = new Selector(selector);
+            newSelector.setPrefix(deactivedPrefix);
+            choiceList.add(newSelector);
+            setRenderHeight(choiceList.size() + 2);
+        }
+    }
+
+    public void addSelectors(List<Selector> selectors) {
+        choiceList.addAll(selectors);
+        setRenderHeight(choiceList.size() + 2);
+    }
+
+    public void addSelectors(String[] selectors) {
+        for (String s : selectors)
+            addSelector(s);
+        setRenderHeight(choiceList.size() + 2);
     }
 }

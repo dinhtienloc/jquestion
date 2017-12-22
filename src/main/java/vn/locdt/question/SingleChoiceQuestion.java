@@ -2,12 +2,11 @@ package vn.locdt.question;
 
 import org.fusesource.jansi.Ansi;
 import vn.locdt.constant.CharConstants;
-import vn.locdt.eception.EmptySelectorListException;
+import vn.locdt.eception.AmbiguousAnswerException;
 import vn.locdt.item.Choice;
 import vn.locdt.item.Selector;
-import vn.locdt.result.ChoiceResultHandler;
-import vn.locdt.result.InputResultHandler;
-import vn.locdt.result.ResultHandler;
+import vn.locdt.item.SingleChoice;
+import vn.locdt.result.Answer;
 import vn.locdt.util.ConsoleUtils;
 import vn.locdt.util.DetectArrowKey;
 import vn.locdt.reader.NonBlockConsoleReader;
@@ -17,37 +16,38 @@ import java.util.List;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class ChoiceQuestion extends Question<Choice> {
-    public ChoiceQuestion(String title, String name, boolean isPrintedResult) {
-        super(isPrintedResult);
-        this.item = new Choice(title, name);
-    }
-
-    public ChoiceQuestion(String title, String name) throws IOException {
+public class SingleChoiceQuestion extends Question<SingleChoice> {
+    public SingleChoiceQuestion(String title, String name) {
         super();
-        this.item = new Choice(title, name);
+        this.item = new SingleChoice(title, name);
+        try {
+            this.answer = new Answer(item);
+        } catch (AmbiguousAnswerException e) {
+            e.printStackTrace();
+        }
     }
 
-    public ChoiceQuestion(String title, String name, List<Selector> selectors, boolean isPrintedResult) throws IOException {
-        super(isPrintedResult);
-        this.item.setChoiceList(selectors);
+    public SingleChoiceQuestion(String title, String name, boolean isPrintedResult) {
+        this(title, name);
         this.isPrintedResult = isPrintedResult;
-        prompt();
     }
 
-    public ChoiceQuestion(String title, String name, List<Selector> selectors) throws IOException {
-        super();
+    public SingleChoiceQuestion(String title, String name, List<Selector> selectors, boolean isPrintedResult) throws IOException {
+        this(title, name, isPrintedResult);
         this.item.setChoiceList(selectors);
-        this.isPrintedResult = isPrintedResult;
-        prompt();
     }
 
-    public ChoiceQuestion addSelector(String value)  {
+    public SingleChoiceQuestion(String title, String name, List<Selector> selectors) {
+        this(title, name);
+        this.item.setChoiceList(selectors);
+    }
+
+    public SingleChoiceQuestion addSelector(String value)  {
         item.addSelector(new Selector(value));
         return this;
     }
 
-    public ChoiceQuestion addSelector(String value, boolean isActive) {
+    public SingleChoiceQuestion addSelector(String value, boolean isActive) {
         Selector selector = new Selector(value);
         item.addSelector(selector);
         if (isActive)
@@ -55,24 +55,29 @@ public class ChoiceQuestion extends Question<Choice> {
         return this;
     }
 
-    public ChoiceQuestion addSelectors(List<Selector> selectors) {
-        item.addSelectorList(selectors);
+    public SingleChoiceQuestion addSelectors(List<Selector> selectors) {
+        item.addSelectors(selectors);
+        return this;
+    }
+
+    public SingleChoiceQuestion addSelectors(String... values) {
+        item.addSelectors(values);
         return this;
     }
 
     @Override
-    public ResultHandler prompt() throws IOException {
+    public Answer prompt() throws IOException {
         System.out.println(ansi().fg(Ansi.Color.DEFAULT).a(this));
 
         if (item.getChoiceList().size() == 0)
-            return new ChoiceResultHandler(item);
+            this.setAnswer("");
 
         NonBlockConsoleReader.start(event -> {
             int charCode = (int)event.getAddedChar();
 //                System.out.println(charCode);
 
             if (charCode == CharConstants.CHAR_ENTER) {
-                item.setResultHandler(new ChoiceResultHandler(item, item.getActivedSelector().getValue()));
+                this.setAnswer(item.getActivedSelector().getValue());
                 if (this.isPrintedResult) ConsoleUtils.printResult(this);
                 event.cancelLoop();
             }
@@ -89,8 +94,7 @@ public class ChoiceQuestion extends Question<Choice> {
                 event.cancelLoop();
         });
 
-        ChoiceResultHandler resultHandler = item.getResultHandler();
-        return resultHandler == null ? new ChoiceResultHandler(item) : resultHandler;
+        return this.answer;
     }
 
     private void changeActiveSelector(CharConstants.ArrowKey arrowKey) {

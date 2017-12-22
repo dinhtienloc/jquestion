@@ -1,41 +1,40 @@
 package vn.locdt.question;
 
 import vn.locdt.JQuestion;
+import vn.locdt.eception.AmbiguousAnswerException;
 import vn.locdt.item.Input;
-import vn.locdt.item.Item;
-import vn.locdt.result.InputResultHandler;
-import vn.locdt.result.ResultHandler;
+import vn.locdt.result.Answer;
 import vn.locdt.util.ConsoleUtils;
 
 import java.io.IOException;
 
-public class InputQuestion extends Question<Input> {
+public class InputQuestion extends Question {
     public InputQuestion(String title, String name, boolean isPrintedResult) throws IOException {
         super(isPrintedResult);
         this.item = new Input(title, name);
+        try {
+            this.answer = new Answer(item);
+        } catch (AmbiguousAnswerException e) {
+            e.printStackTrace();
+        }
     }
 
-    public InputQuestion(String title, String name) throws IOException {
+    public InputQuestion(String title, String name) {
         super();
         this.item = new Input(title, name);
-    }
-
-    public void setContext(String title, String name) {
-        this.item = new Input(title, name);
+        try {
+            this.answer = new Answer(item);
+        } catch (AmbiguousAnswerException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public ResultHandler prompt(){
-        try {
-            String result = JQuestion.getConsole().readLine(item.getTitle());
-            InputResultHandler resultHandler = new InputResultHandler(item, result);
-            item.setResultHandler(resultHandler);
-            if (this.isPrintedResult) ConsoleUtils.printResult(this);
-            return item.getResultHandler();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Answer prompt() throws IOException {
+        String result = JQuestion.getConsole().readLine(item.getTitle() + "\n");
+        this.setAnswer(result);
+        if (this.isPrintedResult) ConsoleUtils.printResult(this);
+        return this.getAnswer();
     }
 
 }
