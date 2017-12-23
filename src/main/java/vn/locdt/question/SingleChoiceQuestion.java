@@ -2,7 +2,7 @@ package vn.locdt.question;
 
 import org.fusesource.jansi.Ansi;
 import vn.locdt.constant.CharConstants;
-import vn.locdt.exception.AmbiguousAnswerException;
+import vn.locdt.exception.UndefinedQuestionException;
 import vn.locdt.item.Selector;
 import vn.locdt.item.SingleChoice;
 import vn.locdt.answer.Answer;
@@ -21,7 +21,7 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
         this.item = new SingleChoice(title, name);
         try {
             this.answer = new Answer(item);
-        } catch (AmbiguousAnswerException e) {
+        } catch (UndefinedQuestionException e) {
             e.printStackTrace();
         }
     }

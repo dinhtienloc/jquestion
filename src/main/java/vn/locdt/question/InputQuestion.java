@@ -1,7 +1,7 @@
 package vn.locdt.question;
 
 import vn.locdt.JQuestion;
-import vn.locdt.exception.AmbiguousAnswerException;
+import vn.locdt.exception.UndefinedQuestionException;
 import vn.locdt.item.Input;
 import vn.locdt.answer.Answer;
 import vn.locdt.util.ConsoleUtils;
@@ -14,7 +14,7 @@ public class InputQuestion extends Question {
         this.item = new Input(title, name);
         try {
             this.answer = new Answer(item);
-        } catch (AmbiguousAnswerException e) {
+        } catch (UndefinedQuestionException e) {
             e.printStackTrace();
         }
     }
@@ -24,7 +24,7 @@ public class InputQuestion extends Question {
         this.item = new Input(title, name);
         try {
             this.answer = new Answer(item);
-        } catch (AmbiguousAnswerException e) {
+        } catch (UndefinedQuestionException e) {
             e.printStackTrace();
         }
     }
