@@ -1,6 +1,6 @@
 package vn.locdt.util;
 
-import vn.locdt.constant.CharConstants;
+import vn.locdt.constant.VKConstants;
 
 public class DetectArrowKey {
     public static boolean detecting = false; //1: Up, 2: Down, 3: Left, 4: Right
@@ -17,20 +17,20 @@ public class DetectArrowKey {
         DetectArrowKey.step = -1;
     }
 
-    public static CharConstants.ArrowKey update(int data) {
+    public static VKConstants.ArrowKey update(int data) {
         DetectArrowKey.step++;
 
         if (DetectArrowKey.step == 2) {
             reset();
             switch (data) {
                 case 65:
-                    return CharConstants.ArrowKey.UP;
+                    return VKConstants.ArrowKey.VK_UP;
                 case 66:
-                    return CharConstants.ArrowKey.DOWN;
+                    return VKConstants.ArrowKey.VK_DOWN;
                 case 68:
-                    return CharConstants.ArrowKey.LEFT;
+                    return VKConstants.ArrowKey.VK_LEFT;
                 case 67:
-                    return CharConstants.ArrowKey.RIGHT;
+                    return VKConstants.ArrowKey.VK_RIGHT;
             }
         }
 

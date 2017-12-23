@@ -1,14 +1,20 @@
 package vn.locdt.question;
 
 import org.fusesource.jansi.Ansi;
-import vn.locdt.constant.CharConstants;
+import vn.locdt.constant.VKConstants;
+import vn.locdt.event.ChangeSelectorEvent;
+import vn.locdt.event.ChooseSelectorEvent;
+import vn.locdt.event.NonBlockInputEvent;
 import vn.locdt.exception.UndefinedQuestionException;
 import vn.locdt.item.Selector;
 import vn.locdt.item.SingleChoice;
 import vn.locdt.answer.Answer;
+import vn.locdt.listener.ChoiceListener;
+import vn.locdt.listener.ChoiceListenerImpl;
+import vn.locdt.listener.NonBlockInputListener;
 import vn.locdt.util.ConsoleUtils;
 import vn.locdt.util.DetectArrowKey;
-import vn.locdt.reader.NonBlockConsoleReader;
+import vn.locdt.util.RawConsoleInput;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +22,9 @@ import java.util.List;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class SingleChoiceQuestion extends Question<SingleChoice> {
+    private ChoiceListener choiceListener;
+    private NonBlockInputListener nonBlockInputListener;
+
     public SingleChoiceQuestion(String title, String name) {
         super();
         this.item = new SingleChoice(title, name);
@@ -39,6 +48,31 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
     public SingleChoiceQuestion(String title, String name, List<Selector> selectors) {
         this(title, name);
         this.item.setChoiceList(selectors);
+    }
+
+    private void registryListener() {
+        choiceListener = new ChoiceListenerImpl(this);
+        nonBlockInputListener = e -> {
+            int charCode = e.getAddedChar();
+//      System.out.println((char)charCode);
+
+            if (charCode == VKConstants.VK_ENTER) {
+                choiceListener.onChosen(new ChooseSelectorEvent(item.getActivedSelector()));
+                e.stop();
+            }
+            else if (charCode == 27 && !DetectArrowKey.detecting) {
+                DetectArrowKey.detect();
+            }
+            else if (DetectArrowKey.detecting) {
+                VKConstants.ArrowKey arrowKey = DetectArrowKey.update(charCode);
+                if (arrowKey != null)
+                    changeActiveSelector(arrowKey);
+            }
+            else if(e.getAddedChar() == VKConstants.VK_CTRL_D)
+                e.stop();
+
+            return e.isStop();
+        };
     }
 
     public SingleChoiceQuestion addSelector(String value)  {
@@ -66,59 +100,50 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
 
     @Override
     public Answer prompt() throws IOException {
+        registryListener();
         System.out.println(ansi().fg(Ansi.Color.DEFAULT).a(this));
 
         if (item.getChoiceList().size() == 0)
             this.setAnswer("");
 
-        NonBlockConsoleReader.start(event -> {
-            int charCode = (int)event.getAddedChar();
-//                System.out.println(charCode);
+        // read input
+        int input;
+        boolean stop;
+        while (true) {
+            input = RawConsoleInput.read(true);
+            stop = nonBlockInputListener.onInput(new NonBlockInputEvent(input));
+            if (stop) break;
+        }
 
-            if (charCode == CharConstants.CHAR_ENTER) {
-                this.setAnswer(item.getActivedSelector().getValue());
-                if (this.isPrintedResult) ConsoleUtils.printResult(this);
-                event.cancelLoop();
-            }
-            else if (charCode == 27 && !DetectArrowKey.detecting) {
-                DetectArrowKey.detect();
-            }
-            else if (DetectArrowKey.detecting) {
-                CharConstants.ArrowKey arrowKey = DetectArrowKey.update(charCode);
-                if (arrowKey != null) {
-                    changeActiveSelector(arrowKey);
-                }
-            }
-            else if(event.getAddedChar() == CharConstants.CHAR_CTRL_D)
-                event.cancelLoop();
-        });
-
+        RawConsoleInput.resetConsoleMode();
         return this.answer;
     }
 
-    private void changeActiveSelector(CharConstants.ArrowKey arrowKey) {
-        int cursor;
+    private void changeActiveSelector(VKConstants.ArrowKey arrowKey) {
+        int cursor = item.indexOfActivedSelector();
+        Selector lastSelector = item.getActivedSelector();
+        Selector nextSelector;
+
         List<Selector> selectors = item.getChoiceList();
         switch (arrowKey) {
-            case UP:
-                cursor = item.indexOfActivedSelector();
-                if (cursor > 0)
-                    item.setActivedSelector(selectors.get(cursor - 1));
-                ConsoleUtils.rerenderChoiceQuestion(this);
+            case VK_UP:
+                if (cursor > 0) cursor--;
                 break;
-            case DOWN:
-                cursor = item.indexOfActivedSelector();
-                if (cursor < selectors.size() - 1)
-                    item.setActivedSelector(selectors.get(cursor + 1));
-                ConsoleUtils.rerenderChoiceQuestion(this);
+            case VK_DOWN:
+                if (cursor < selectors.size() - 1) cursor++;
                 break;
+        }
+
+        nextSelector = selectors.get(cursor);
+        if (nextSelector != lastSelector) {
+            item.setActivedSelector(nextSelector);
+            choiceListener.onChanged(new ChangeSelectorEvent(lastSelector, nextSelector));
         }
     }
 
     @Override
     public String toString() {
-        String str = "";
-        str += item.getTitle() + "\n";
+        String str = item.getTitle() + "\n";
         List<Selector> selectors = item.getChoiceList();
         if (selectors.size() == 0)
             return str;

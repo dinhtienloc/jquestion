@@ -2,6 +2,7 @@ package vn.locdt.question;
 
 import vn.locdt.item.Item;
 import vn.locdt.answer.Answer;
+import vn.locdt.listener.InputListener;
 
 import java.io.IOException;
 
@@ -21,17 +22,10 @@ public abstract class Question<T extends Item> {
         return item;
     }
 
-    public void setItem(T item) {
-        this.item = item;
-    }
-
     public boolean isPrintedResult() {
         return isPrintedResult;
     }
 
-    public void setPrintedResult(boolean printedResult) {
-        isPrintedResult = printedResult;
-    }
 
     public abstract Answer prompt() throws IOException;
 
