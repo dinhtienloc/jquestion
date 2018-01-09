@@ -1,7 +1,11 @@
 package vn.locdt.event;
 
 public class InputEvent {
-    protected String inputValue;
+    private String inputValue;
+
+    public InputEvent(String inputValue) {
+        this.inputValue = inputValue;
+    }
 
     public String getInputValue() {
         return inputValue;

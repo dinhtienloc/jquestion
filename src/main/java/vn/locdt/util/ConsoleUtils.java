@@ -5,6 +5,7 @@ import org.fusesource.jansi.AnsiConsole;
 import vn.locdt.element.item.Choice;
 import vn.locdt.element.item.Item;
 import vn.locdt.element.item.Selector;
+import vn.locdt.element.question.InputQuestion;
 import vn.locdt.element.question.SingleChoiceQuestion;
 import vn.locdt.element.question.Question;
 
@@ -14,8 +15,11 @@ public class ConsoleUtils {
     private final static String OS_NAME = System.getProperty("os.name");
 
     public static void renderChoiceQuestion(SingleChoiceQuestion singleChoiceQuestion) {
-        AnsiConsole.out.print(singleChoiceQuestion.getRenderHeight());
         AnsiConsole.out.print(ansi().cursorUp(singleChoiceQuestion.getRenderHeight()).a("\r").eraseScreen(Ansi.Erase.FORWARD).fg(Ansi.Color.DEFAULT).a(singleChoiceQuestion.toString()).eraseScreen(Ansi.Erase.FORWARD).reset());
+    }
+
+    public static void renderQuestion(Question q) {
+        AnsiConsole.out.print(ansi().fg(Ansi.Color.DEFAULT).a(q));
     }
 
     public static String printSelector(Selector selector) {

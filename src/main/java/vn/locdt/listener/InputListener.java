@@ -1,8 +1,9 @@
 package vn.locdt.listener;
 
+import vn.locdt.answer.Answer;
 import vn.locdt.event.InputEvent;
 
 @FunctionalInterface
 public interface InputListener extends Listener {
-    void onInput(InputEvent e);
+    Answer onInput(InputEvent e);
 }

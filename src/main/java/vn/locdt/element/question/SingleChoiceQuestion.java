@@ -55,7 +55,8 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
         updateRenderHeight();
     }
 
-    private void registryListener() {
+    @Override
+    protected void registryListener() {
         choiceListener = new ChoiceListenerImpl(this);
         nonBlockInputListener = e -> {
             int charCode = e.getAddedChar();
@@ -94,8 +95,8 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
 
     @Override
     public Answer prompt() throws IOException, ConsoleNotInitializeException {
-        registryListener();
-        AnsiConsole.out.print(ansi().fg(Ansi.Color.DEFAULT).a(this));
+
+        ConsoleUtils.renderQuestion(this);
 
         if (item.getChoiceList().size() == 0)
             this.setAnswer("");
