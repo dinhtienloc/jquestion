@@ -35,7 +35,7 @@ public class InputQuestion extends Question {
     @Override
     public Answer prompt() throws IOException, ConsoleNotInitializeException {
         ConsoleReader console = JQuestion.getConsole();
-        String result = console.readLine(item.getTitle() + "\n");
+        String result = console.readLine(item.getTitle());
         this.setAnswer(result);
         if (this.isPrintedResult) ConsoleUtils.printResult(this);
         return this.getAnswer();

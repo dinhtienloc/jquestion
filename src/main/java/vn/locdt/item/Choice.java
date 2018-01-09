@@ -20,7 +20,7 @@ public abstract class Choice extends Item {
         for (String s : selectors) {
             choiceList.add(new Selector(s));
         }
-        setRenderHeight(choiceList.size() + 2);
+        updateRenderHeight();
     }
 
     public List<Selector> getChoiceList() {
@@ -35,7 +35,7 @@ public abstract class Choice extends Item {
         if (selector != null) {
             selector.setPrefix(deactivedPrefix);
             choiceList.add(selector);
-            setRenderHeight(choiceList.size() + 2);
+            updateRenderHeight();
         }
     }
 
@@ -44,18 +44,23 @@ public abstract class Choice extends Item {
             Selector newSelector = new Selector(selector);
             newSelector.setPrefix(deactivedPrefix);
             choiceList.add(newSelector);
-            setRenderHeight(choiceList.size() + 2);
+            updateRenderHeight();
         }
     }
 
     public void addSelectors(List<Selector> selectors) {
         choiceList.addAll(selectors);
-        setRenderHeight(choiceList.size() + 2);
+        updateRenderHeight();
     }
 
     public void addSelectors(String[] selectors) {
         for (String s : selectors)
             addSelector(s);
-        setRenderHeight(choiceList.size() + 2);
+        updateRenderHeight();
+    }
+
+    @Override
+    public void updateRenderHeight() {
+        setRenderHeight(choiceList.size());
     }
 }

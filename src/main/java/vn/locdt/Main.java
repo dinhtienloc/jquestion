@@ -13,9 +13,9 @@ public class Main {
             JQuestion jQuestion = new JQuestion();
 
             jQuestion
-                .addInputQuestion("Mày học lớp nào?", "group")
-                .addSingleChoiceQuestion(new SingleChoiceQuestion("Mày muốn gì?", "want")
-                    .addSelectors("Éo nói", "Không tạch môn", "Muốn ôn thi", "Nói nhiều quá"));
+                .addInputQuestion("What is your grade?", "group")
+                .addSingleChoiceQuestion(new SingleChoiceQuestion("What do you want?", "want")
+                    .addSelectors("Candy", "Apple", "Nothing"));
 
             Map<String, String> resultMap = jQuestion.prompt();
             Gson gson = new Gson();

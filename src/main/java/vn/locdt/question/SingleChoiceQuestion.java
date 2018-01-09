@@ -1,6 +1,7 @@
 package vn.locdt.question;
 
 import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
 import vn.locdt.constant.VKConstants;
 import vn.locdt.event.ChangeSelectorEvent;
 import vn.locdt.event.ChooseSelectorEvent;
@@ -39,16 +40,19 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
     public SingleChoiceQuestion(String title, String name, boolean isPrintedResult) {
         this(title, name);
         this.isPrintedResult = isPrintedResult;
+        updateRenderHeight();
     }
 
     public SingleChoiceQuestion(String title, String name, List<Selector> selectors, boolean isPrintedResult) throws IOException {
         this(title, name, isPrintedResult);
         this.item.setChoiceList(selectors);
+        updateRenderHeight();
     }
 
     public SingleChoiceQuestion(String title, String name, List<Selector> selectors) {
         this(title, name);
         this.item.setChoiceList(selectors);
+        updateRenderHeight();
     }
 
     private void registryListener() {
@@ -62,6 +66,7 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
 
     public SingleChoiceQuestion addSelector(String value)  {
         item.addSelector(new Selector(value));
+        updateRenderHeight();
         return this;
     }
 
@@ -70,23 +75,27 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
         item.addSelector(selector);
         if (isActive)
             item.setActivedSelector(selector);
+
+        updateRenderHeight();
         return this;
     }
 
     public SingleChoiceQuestion addSelectors(List<Selector> selectors) {
         item.addSelectors(selectors);
+        updateRenderHeight();
         return this;
     }
 
     public SingleChoiceQuestion addSelectors(String... values) {
         item.addSelectors(values);
+        updateRenderHeight();
         return this;
     }
 
     @Override
     public Answer prompt() throws IOException, ConsoleNotInitializeException {
         registryListener();
-        System.out.println(ansi().fg(Ansi.Color.DEFAULT).a(this));
+        AnsiConsole.out.print(ansi().fg(Ansi.Color.DEFAULT).a(this));
 
         if (item.getChoiceList().size() == 0)
             this.setAnswer("");
@@ -178,7 +187,9 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
             item.setActivedSelector(item.getChoiceList().get(0));
 
         for (Selector selector : selectors) {
-            str += ConsoleUtils.printSelector(selector) + "\n";
+            str += ConsoleUtils.printSelector(selector);
+            if (selectors.indexOf(selector) < selectors.size() - 1)
+                str += "\n";
         }
 
         return str;

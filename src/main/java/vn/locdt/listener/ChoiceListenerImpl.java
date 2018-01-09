@@ -14,7 +14,7 @@ public class ChoiceListenerImpl implements ChoiceListener {
 
     @Override
     public void onChanged(ChangeSelectorEvent e) {
-        ConsoleUtils.rerenderChoiceQuestion(question);
+        ConsoleUtils.renderChoiceQuestion(question);
     }
 
     @Override

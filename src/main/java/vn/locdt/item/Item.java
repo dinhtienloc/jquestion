@@ -1,7 +1,8 @@
 package vn.locdt.item;
 
-public abstract class Item {
-    private int renderHeight;
+import vn.locdt.RenderElement;
+
+public abstract class Item extends RenderElement {
     protected String name;
     protected String value;
     protected String title;
@@ -16,14 +17,6 @@ public abstract class Item {
         this.title = title;
         this.name = name;
         this.value = "";
-    }
-
-    public int getRenderHeight() {
-        return renderHeight;
-    }
-
-    public void setRenderHeight(int renderHeight) {
-        this.renderHeight = renderHeight;
     }
 
     public String getName() {

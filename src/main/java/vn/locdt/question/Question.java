@@ -1,5 +1,6 @@
 package vn.locdt.question;
 
+import vn.locdt.RenderElement;
 import vn.locdt.exception.ConsoleNotInitializeException;
 import vn.locdt.item.Item;
 import vn.locdt.answer.Answer;
@@ -7,13 +8,12 @@ import vn.locdt.listener.InputListener;
 
 import java.io.IOException;
 
-public abstract class Question<T extends Item> {
+public abstract class Question<T extends Item> extends RenderElement {
     protected T item;
     protected boolean isPrintedResult = true;
     protected Answer answer;
 
-    public Question() {
-    }
+    public Question() {}
 
     public Question(boolean isPrintedResult) {
         this.isPrintedResult = isPrintedResult;
@@ -48,5 +48,10 @@ public abstract class Question<T extends Item> {
 
     public void setAnswer(String value) {
         this.answer.setValue(value);
+    }
+
+    @Override
+    public void updateRenderHeight() {
+        setRenderHeight(getItem().getRenderHeight());
     }
 }
