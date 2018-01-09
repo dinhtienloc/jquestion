@@ -1,4 +1,4 @@
-package vn.locdt.question;
+package vn.locdt.element.question;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
@@ -8,8 +8,8 @@ import vn.locdt.event.ChooseSelectorEvent;
 import vn.locdt.event.NonBlockInputEvent;
 import vn.locdt.exception.ConsoleNotInitializeException;
 import vn.locdt.exception.UndefinedQuestionException;
-import vn.locdt.item.Selector;
-import vn.locdt.item.SingleChoice;
+import vn.locdt.element.item.Selector;
+import vn.locdt.element.item.SingleChoice;
 import vn.locdt.answer.Answer;
 import vn.locdt.listener.ChoiceListener;
 import vn.locdt.listener.ChoiceListenerImpl;

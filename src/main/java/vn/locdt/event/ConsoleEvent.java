@@ -1,6 +1,6 @@
 package vn.locdt.event;
 
-import vn.locdt.question.Question;
+import vn.locdt.element.question.Question;
 
 public abstract class ConsoleEvent {
     protected String value;

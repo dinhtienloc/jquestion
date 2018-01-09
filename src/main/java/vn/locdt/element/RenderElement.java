@@ -1,4 +1,4 @@
-package vn.locdt;
+package vn.locdt.element;
 
 /**
  * Created by locdt on 1/10/2018.

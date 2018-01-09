@@ -1,4 +1,4 @@
-package vn.locdt.item;
+package vn.locdt.element.item;
 
 public class Input extends Item {
     public Input(String title, String name, String value) {

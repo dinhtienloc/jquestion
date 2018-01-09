@@ -1,7 +1,6 @@
-package vn.locdt.item;
+package vn.locdt.element.item;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class Choice extends Item {

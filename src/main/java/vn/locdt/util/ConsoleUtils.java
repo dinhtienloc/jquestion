@@ -2,12 +2,11 @@ package vn.locdt.util;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
-import vn.locdt.JQuestion;
-import vn.locdt.item.Choice;
-import vn.locdt.item.Item;
-import vn.locdt.item.Selector;
-import vn.locdt.question.SingleChoiceQuestion;
-import vn.locdt.question.Question;
+import vn.locdt.element.item.Choice;
+import vn.locdt.element.item.Item;
+import vn.locdt.element.item.Selector;
+import vn.locdt.element.question.SingleChoiceQuestion;
+import vn.locdt.element.question.Question;
 
 import static org.fusesource.jansi.Ansi.ansi;
 

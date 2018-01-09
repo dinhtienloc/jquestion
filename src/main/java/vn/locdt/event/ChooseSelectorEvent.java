@@ -1,6 +1,6 @@
 package vn.locdt.event;
 
-import vn.locdt.item.Selector;
+import vn.locdt.element.item.Selector;
 
 public class ChooseSelectorEvent {
     private Selector selector;

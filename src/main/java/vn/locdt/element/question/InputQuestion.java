@@ -1,14 +1,13 @@
-package vn.locdt.question;
+package vn.locdt.element.question;
 
 import jline.console.ConsoleReader;
 import vn.locdt.JQuestion;
 import vn.locdt.exception.ConsoleNotInitializeException;
 import vn.locdt.exception.UndefinedQuestionException;
-import vn.locdt.item.Input;
+import vn.locdt.element.item.Input;
 import vn.locdt.answer.Answer;
 import vn.locdt.util.ConsoleUtils;
 
-import java.io.Console;
 import java.io.IOException;
 
 public class InputQuestion extends Question {

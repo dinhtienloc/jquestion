@@ -2,7 +2,7 @@ package vn.locdt.listener;
 
 import vn.locdt.event.ChangeSelectorEvent;
 import vn.locdt.event.ChooseSelectorEvent;
-import vn.locdt.question.SingleChoiceQuestion;
+import vn.locdt.element.question.SingleChoiceQuestion;
 import vn.locdt.util.ConsoleUtils;
 
 public class ChoiceListenerImpl implements ChoiceListener {

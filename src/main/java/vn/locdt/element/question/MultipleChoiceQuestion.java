@@ -1,7 +1,6 @@
-package vn.locdt.question;
+package vn.locdt.element.question;
 
-import vn.locdt.item.Choice;
-import vn.locdt.item.Selector;
+import vn.locdt.element.item.Choice;
 
 import java.util.ArrayList;
 import java.util.List;

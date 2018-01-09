@@ -2,7 +2,7 @@ package vn.locdt;
 
 import com.google.gson.Gson;
 import vn.locdt.exception.ConsoleNotInitializeException;
-import vn.locdt.question.SingleChoiceQuestion;
+import vn.locdt.element.question.SingleChoiceQuestion;
 
 import java.io.IOException;
 import java.util.Map;

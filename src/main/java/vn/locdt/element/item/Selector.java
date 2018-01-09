@@ -1,4 +1,4 @@
-package vn.locdt.item;
+package vn.locdt.element.item;
 
 public class Selector {
     private String prefix;

@@ -1,7 +1,7 @@
 package vn.locdt.answer;
 
 import vn.locdt.exception.UndefinedQuestionException;
-import vn.locdt.item.Item;
+import vn.locdt.element.item.Item;
 
 public class Answer {
     private Item sourceItem;

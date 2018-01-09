@@ -1,6 +1,6 @@
-package vn.locdt.item;
+package vn.locdt.element.item;
 
-import vn.locdt.RenderElement;
+import vn.locdt.element.RenderElement;
 
 public abstract class Item extends RenderElement {
     protected String name;

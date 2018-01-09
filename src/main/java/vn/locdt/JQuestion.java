@@ -2,9 +2,9 @@ package vn.locdt;
 
 import jline.console.ConsoleReader;
 import vn.locdt.exception.ConsoleNotInitializeException;
-import vn.locdt.question.InputQuestion;
-import vn.locdt.question.Question;
-import vn.locdt.question.SingleChoiceQuestion;
+import vn.locdt.element.question.InputQuestion;
+import vn.locdt.element.question.Question;
+import vn.locdt.element.question.SingleChoiceQuestion;
 import vn.locdt.answer.Answer;
 
 import java.io.IOException;

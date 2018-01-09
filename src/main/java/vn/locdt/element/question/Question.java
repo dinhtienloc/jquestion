@@ -1,10 +1,9 @@
-package vn.locdt.question;
+package vn.locdt.element.question;
 
-import vn.locdt.RenderElement;
+import vn.locdt.element.RenderElement;
 import vn.locdt.exception.ConsoleNotInitializeException;
-import vn.locdt.item.Item;
+import vn.locdt.element.item.Item;
 import vn.locdt.answer.Answer;
-import vn.locdt.listener.InputListener;
 
 import java.io.IOException;
 

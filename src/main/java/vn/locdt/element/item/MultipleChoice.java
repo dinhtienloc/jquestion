@@ -1,4 +1,4 @@
-package vn.locdt.item;
+package vn.locdt.element.item;
 
 import java.util.List;
 
