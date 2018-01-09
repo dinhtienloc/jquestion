@@ -1,11 +1,14 @@
 package vn.locdt.question;
 
+import jline.console.ConsoleReader;
 import vn.locdt.JQuestion;
+import vn.locdt.exception.ConsoleNotInitializeException;
 import vn.locdt.exception.UndefinedQuestionException;
 import vn.locdt.item.Input;
 import vn.locdt.answer.Answer;
 import vn.locdt.util.ConsoleUtils;
 
+import java.io.Console;
 import java.io.IOException;
 
 public class InputQuestion extends Question {
@@ -30,8 +33,9 @@ public class InputQuestion extends Question {
     }
 
     @Override
-    public Answer prompt() throws IOException {
-        String result = JQuestion.getConsole().readLine(item.getTitle() + "\n");
+    public Answer prompt() throws IOException, ConsoleNotInitializeException {
+        ConsoleReader console = JQuestion.getConsole();
+        String result = console.readLine(item.getTitle() + "\n");
         this.setAnswer(result);
         if (this.isPrintedResult) ConsoleUtils.printResult(this);
         return this.getAnswer();

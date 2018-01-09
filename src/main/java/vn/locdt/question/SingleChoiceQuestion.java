@@ -5,6 +5,7 @@ import vn.locdt.constant.VKConstants;
 import vn.locdt.event.ChangeSelectorEvent;
 import vn.locdt.event.ChooseSelectorEvent;
 import vn.locdt.event.NonBlockInputEvent;
+import vn.locdt.exception.ConsoleNotInitializeException;
 import vn.locdt.exception.UndefinedQuestionException;
 import vn.locdt.item.Selector;
 import vn.locdt.item.SingleChoice;
@@ -54,24 +55,8 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
         choiceListener = new ChoiceListenerImpl(this);
         nonBlockInputListener = e -> {
             int charCode = e.getAddedChar();
-//      System.out.println((char)charCode);
-
-            if (charCode == VKConstants.VK_ENTER) {
-                choiceListener.onChosen(new ChooseSelectorEvent(item.getActivedSelector()));
-                e.stop();
-            }
-            else if (charCode == 27 && !DetectArrowKey.detecting) {
-                DetectArrowKey.detect();
-            }
-            else if (DetectArrowKey.detecting) {
-                VKConstants.ArrowKey arrowKey = DetectArrowKey.update(charCode);
-                if (arrowKey != null)
-                    changeActiveSelector(arrowKey);
-            }
-            else if(e.getAddedChar() == VKConstants.VK_CTRL_D)
-                e.stop();
-
-            return e.isStop();
+//            System.out.println(charCode);
+            return handleInput(charCode, e);
         };
     }
 
@@ -99,7 +84,7 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
     }
 
     @Override
-    public Answer prompt() throws IOException {
+    public Answer prompt() throws IOException, ConsoleNotInitializeException {
         registryListener();
         System.out.println(ansi().fg(Ansi.Color.DEFAULT).a(this));
 
@@ -139,6 +124,47 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
             item.setActivedSelector(nextSelector);
             choiceListener.onChanged(new ChangeSelectorEvent(lastSelector, nextSelector));
         }
+    }
+
+    private boolean handleInput(int charCode, NonBlockInputEvent e) {
+        if (charCode == VKConstants.VK_ENTER) {
+            choiceListener.onChosen(new ChooseSelectorEvent(item.getActivedSelector()));
+            e.stop();
+        } else if (charCode == 27 && !DetectArrowKey.detecting) {
+            DetectArrowKey.detect();
+        } else if (DetectArrowKey.detecting) {
+            VKConstants.ArrowKey arrowKey = DetectArrowKey.update(charCode);
+            if (arrowKey != null)
+                changeActiveSelector(arrowKey);
+        } else if (e.getAddedChar() == VKConstants.VK_CTRL_D) {
+            e.stop();
+        }
+        else if (ConsoleUtils.isWindowOS()) {
+            handleWindowInput(charCode, e);
+        }
+
+        return e.isStop();
+    }
+
+    private void handleWindowInput(int charCode, NonBlockInputEvent e) {
+        VKConstants.ArrowKey arrowKey = null;
+        switch (charCode) {
+            case VKConstants.WindowOS.VK_DOWN:
+                arrowKey = VKConstants.ArrowKey.VK_DOWN;
+                break;
+            case VKConstants.WindowOS.VK_UP:
+                arrowKey = VKConstants.ArrowKey.VK_UP;
+                break;
+            case VKConstants.WindowOS.VK_LEFT:
+                arrowKey = VKConstants.ArrowKey.VK_LEFT;
+                break;
+            case VKConstants.WindowOS.VK_RIGHT:
+                arrowKey = VKConstants.ArrowKey.VK_RIGHT;
+                break;
+        }
+
+        if (arrowKey != null)
+            changeActiveSelector(arrowKey);
     }
 
     @Override

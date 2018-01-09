@@ -111,7 +111,7 @@ public class RawConsoleInput {
         int c = msvcrt._getwch();
         if (c == 0 || c == 0xE0) {                              // Function key or arrow key
             c = msvcrt._getwch();
-            System.out.println("Function key or arrow key: " + c);
+//            System.out.println("Function key or arrow key: " + c);
             if (c >= 0 && c <= 0x18FF) {
                 return 0xE000 + c; }                              // construct key code in private Unicode range
             return invalidKey; }

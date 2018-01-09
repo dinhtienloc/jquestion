@@ -1,5 +1,6 @@
 package vn.locdt.question;
 
+import vn.locdt.exception.ConsoleNotInitializeException;
 import vn.locdt.item.Item;
 import vn.locdt.answer.Answer;
 import vn.locdt.listener.InputListener;
@@ -27,7 +28,7 @@ public abstract class Question<T extends Item> {
     }
 
 
-    public abstract Answer prompt() throws IOException;
+    public abstract Answer prompt() throws IOException, ConsoleNotInitializeException;
 
     public Answer getAnswer() {
         return this.answer;

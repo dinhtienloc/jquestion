@@ -2,6 +2,7 @@ package vn.locdt.util;
 
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
+import vn.locdt.JQuestion;
 import vn.locdt.item.Choice;
 import vn.locdt.item.Item;
 import vn.locdt.item.Selector;
@@ -11,6 +12,8 @@ import vn.locdt.question.Question;
 import static org.fusesource.jansi.Ansi.ansi;
 
 public class ConsoleUtils {
+    private final static String OS_NAME = System.getProperty("os.name");
+
     public static void rerenderChoiceQuestion(SingleChoiceQuestion singleChoiceQuestion) {
         AnsiConsole.out.println(ansi().cursorUp(singleChoiceQuestion.getItem().getChoiceList().size()+2).fg(Ansi.Color.DEFAULT).a(singleChoiceQuestion.toString()).eraseScreen(Ansi.Erase.FORWARD).reset());
     }
@@ -26,5 +29,9 @@ public class ConsoleUtils {
         AnsiConsole.out.println(ansi().cursorUp(item.getRenderHeight()).fg(Ansi.Color.DEFAULT).a(item.getTitle())
                                 .fg(Ansi.Color.GREEN).a("("+inputQuestion.getAnswerValue()+")")
                                 .eraseScreen(Ansi.Erase.FORWARD).reset());
+    }
+
+    public static boolean isWindowOS() {
+        return OS_NAME.startsWith("Windows");
     }
 }

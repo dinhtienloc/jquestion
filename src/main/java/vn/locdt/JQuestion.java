@@ -1,6 +1,7 @@
 package vn.locdt;
 
 import jline.console.ConsoleReader;
+import vn.locdt.exception.ConsoleNotInitializeException;
 import vn.locdt.question.InputQuestion;
 import vn.locdt.question.Question;
 import vn.locdt.question.SingleChoiceQuestion;
@@ -10,26 +11,27 @@ import java.io.IOException;
 import java.util.*;
 
 public class JQuestion {
-    private static ConsoleReader rootConsole;
+    private static ConsoleReader console;
+
     private List<Question> questions;
 
-    public JQuestion() {
-        this.questions = new ArrayList<>();
-    }
-
-    public static ConsoleReader createConsole() {
+    static {
         try {
-            if (JQuestion.rootConsole == null)
-                JQuestion.rootConsole = new ConsoleReader();
+            console = new ConsoleReader();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return JQuestion.rootConsole;
     }
 
-    public static ConsoleReader getConsole() {
-        return createConsole();
+    public JQuestion() throws IOException {
+        this.questions = new ArrayList<>();
     }
+
+    public static ConsoleReader getConsole() throws ConsoleNotInitializeException {
+        if (console == null) throw new ConsoleNotInitializeException("Console is not initialized.");
+        return console;
+    }
+
 
     public JQuestion addInputQuestion(String title, String name) {
         this.questions.add(new InputQuestion(title, name));
@@ -46,7 +48,7 @@ public class JQuestion {
         return this;
     }
 
-    public Map<String, String> prompt() throws IOException {
+    public Map<String, String> prompt() throws IOException, ConsoleNotInitializeException {
         Map<String, String> resultMap = new LinkedHashMap<>();
 
         if (questions.size() == 0)

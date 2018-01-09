@@ -15,4 +15,11 @@ public final class VKConstants {
         VK_LEFT,
         VK_RIGHT
     }
+
+    public final class WindowOS {
+        public static final int VK_UP = 57416;
+        public static final int VK_DOWN = 57424;
+        public static final int VK_LEFT = 57419;
+        public static final int VK_RIGHT = 57421;
+    }
 }
