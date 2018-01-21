@@ -1,7 +1,6 @@
 package vn.locdt.element.question;
 
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
+import vn.locdt.JQuestion;
 import vn.locdt.constant.VKConstants;
 import vn.locdt.event.ChangeSelectorEvent;
 import vn.locdt.event.ChooseSelectorEvent;
@@ -12,20 +11,19 @@ import vn.locdt.element.item.Selector;
 import vn.locdt.element.item.SingleChoice;
 import vn.locdt.answer.Answer;
 import vn.locdt.listener.ChoiceListener;
-import vn.locdt.listener.ChoiceListenerImpl;
 import vn.locdt.listener.NonBlockInputListener;
 import vn.locdt.util.ConsoleUtils;
 import vn.locdt.util.DetectArrowKey;
 import vn.locdt.util.RawConsoleInput;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class SingleChoiceQuestion extends Question<SingleChoice> {
-    private ChoiceListener choiceListener;
-    private NonBlockInputListener nonBlockInputListener;
+public class SingleChoiceQuestion extends Question<SingleChoice> implements NonBlockInputListener, ChoiceListener {
 
     public SingleChoiceQuestion(String title, String name) {
         super();
@@ -45,24 +43,24 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
 
     public SingleChoiceQuestion(String title, String name, List<Selector> selectors, boolean isPrintedResult) throws IOException {
         this(title, name, isPrintedResult);
-        this.item.setChoiceList(selectors);
+        this.item.setSelectors(selectors);
         updateRenderHeight();
     }
 
-    public SingleChoiceQuestion(String title, String name, List<Selector> selectors) {
+    public SingleChoiceQuestion(String title, String name, String[] selections) {
         this(title, name);
-        this.item.setChoiceList(selectors);
+        for (Object select : selections) {
+            this.item.addSelector(new Selector(select.toString()));
+        }
         updateRenderHeight();
     }
 
-    @Override
-    protected void registryListener() {
-        choiceListener = new ChoiceListenerImpl(this);
-        nonBlockInputListener = e -> {
-            int charCode = e.getAddedChar();
-//            System.out.println(charCode);
-            return handleInput(charCode, e);
-        };
+    public SingleChoiceQuestion(String title, String name, List<String> selections) {
+        this(title, name);
+        for (Object select : selections) {
+            this.item.addSelector(new Selector(select.toString()));
+        }
+        updateRenderHeight();
     }
 
     public SingleChoiceQuestion addSelector(String value)  {
@@ -95,22 +93,19 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
 
     @Override
     public Answer prompt() throws IOException, ConsoleNotInitializeException {
-
         ConsoleUtils.renderQuestion(this);
 
-        if (item.getChoiceList().size() == 0)
+        if (item.getSelectors().size() == 0)
             this.setAnswer("");
 
         // read input
         int input;
-        boolean stop;
+        boolean finished;
         while (true) {
-            input = RawConsoleInput.read(true);
-            stop = nonBlockInputListener.onInput(new NonBlockInputEvent(input));
-            if (stop) break;
+            input = JQuestion.getConsole().readCharacter();
+            finished = onInput(new NonBlockInputEvent(input));
+            if (finished) break;
         }
-
-        RawConsoleInput.resetConsoleMode();
         return this.answer;
     }
 
@@ -119,7 +114,7 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
         Selector lastSelector = item.getActivedSelector();
         Selector nextSelector;
 
-        List<Selector> selectors = item.getChoiceList();
+        List<Selector> selectors = item.getSelectors();
         switch (arrowKey) {
             case VK_UP:
                 if (cursor > 0) cursor--;
@@ -132,13 +127,13 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
         nextSelector = selectors.get(cursor);
         if (nextSelector != lastSelector) {
             item.setActivedSelector(nextSelector);
-            choiceListener.onChanged(new ChangeSelectorEvent(lastSelector, nextSelector));
+            onChanged(new ChangeSelectorEvent(lastSelector, nextSelector));
         }
     }
 
     private boolean handleInput(int charCode, NonBlockInputEvent e) {
         if (charCode == VKConstants.VK_ENTER) {
-            choiceListener.onChosen(new ChooseSelectorEvent(item.getActivedSelector()));
+            onChosen(new ChooseSelectorEvent(item.getActivedSelector()));
             e.stop();
         } else if (charCode == 27 && !DetectArrowKey.detecting) {
             DetectArrowKey.detect();
@@ -180,12 +175,12 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
     @Override
     public String toString() {
         String str = item.getTitle() + "\n";
-        List<Selector> selectors = item.getChoiceList();
+        List<Selector> selectors = item.getSelectors();
         if (selectors.size() == 0)
             return str;
 
         if (item.getActivedSelector() == null)
-            item.setActivedSelector(item.getChoiceList().get(0));
+            item.setActivedSelector(item.getSelectors().get(0));
 
         for (Selector selector : selectors) {
             str += ConsoleUtils.printSelector(selector);
@@ -194,5 +189,23 @@ public class SingleChoiceQuestion extends Question<SingleChoice> {
         }
 
         return str;
+    }
+
+    @Override
+    public boolean onInput(NonBlockInputEvent e) {
+        int charCode = e.getAddedChar();
+//            System.out.println(charCode);
+        return handleInput(charCode, e);
+    }
+
+    @Override
+    public void onChanged(ChangeSelectorEvent e) {
+        ConsoleUtils.renderChoiceQuestion(this);
+    }
+
+    @Override
+    public void onChosen(ChooseSelectorEvent e) {
+        setAnswer(e.getSelector().getValue());
+        if (this.isPrintedResult()) ConsoleUtils.printResult(this);
     }
 }

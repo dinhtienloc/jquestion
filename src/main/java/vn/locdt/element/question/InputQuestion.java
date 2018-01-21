@@ -12,8 +12,7 @@ import vn.locdt.util.ConsoleUtils;
 
 import java.io.IOException;
 
-public class InputQuestion extends Question {
-    private InputListener inputListener;
+public class InputQuestion extends Question implements InputListener{
 
     public InputQuestion(String title, String name, boolean isPrintedResult) throws IOException {
         super(isPrintedResult);
@@ -36,19 +35,16 @@ public class InputQuestion extends Question {
     }
 
     @Override
-    protected void registryListener() {
-        inputListener = e -> {
-            setAnswer(e.getInputValue());
-            if (this.isPrintedResult) ConsoleUtils.printResult(this);
-            return getAnswer();
-        };
-    }
-
-    @Override
     public Answer prompt() throws IOException, ConsoleNotInitializeException {
         ConsoleReader console = JQuestion.getConsole();
         String result = console.readLine(item.getTitle() + " ");
-        return inputListener.onInput(new InputEvent(result));
+        return onInput(new InputEvent(result));
     }
 
+    @Override
+    public Answer onInput(InputEvent e) {
+        setAnswer(e.getInputValue());
+        if (this.isPrintedResult) ConsoleUtils.printResult(this);
+        return getAnswer();
+    }
 }

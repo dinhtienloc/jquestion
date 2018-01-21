@@ -6,34 +6,37 @@ import java.util.List;
 public abstract class Choice extends Item {
     public static String activedPrefix = "> ";
     public static String deactivedPrefix = "  ";
-    protected List<Selector> choiceList;
+    protected List<Selector> selectors;
 
     public Choice(String title, String name) {
         super(title, name, "");
-        choiceList = new ArrayList<>();
+        this.selectors = new ArrayList<>();
     }
 
     public Choice(String title, String name, String[] selectors) {
         super(title, name, "");
-        choiceList = new ArrayList<>();
+        this.selectors = new ArrayList<>();
         for (String s : selectors) {
-            choiceList.add(new Selector(s));
+            this.selectors.add(new Selector(s));
         }
         updateRenderHeight();
     }
 
-    public List<Selector> getChoiceList() {
-        return choiceList;
+    public List<Selector> getSelectors() {
+        return this.selectors;
     }
 
-    public void setChoiceList(List<Selector> choiceList) {
-        choiceList = choiceList;
+    public void setSelectors(List<Selector> selectors) {
+        this.selectors = selectors;
+        for (Selector selector : this.selectors) {
+            selector.setPrefix(deactivedPrefix);
+        }
     }
 
     public void addSelector(Selector selector) {
         if (selector != null) {
             selector.setPrefix(deactivedPrefix);
-            choiceList.add(selector);
+            this.selectors.add(selector);
             updateRenderHeight();
         }
     }
@@ -42,13 +45,13 @@ public abstract class Choice extends Item {
         if (selector != null) {
             Selector newSelector = new Selector(selector);
             newSelector.setPrefix(deactivedPrefix);
-            choiceList.add(newSelector);
+            this.selectors.add(newSelector);
             updateRenderHeight();
         }
     }
 
     public void addSelectors(List<Selector> selectors) {
-        choiceList.addAll(selectors);
+        this.selectors.addAll(selectors);
         updateRenderHeight();
     }
 
@@ -60,6 +63,6 @@ public abstract class Choice extends Item {
 
     @Override
     public void updateRenderHeight() {
-        setRenderHeight(choiceList.size());
+        setRenderHeight(this.selectors.size());
     }
 }

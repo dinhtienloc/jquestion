@@ -20,9 +20,9 @@ public class SingleChoice extends Choice {
     }
 
     public int indexOfActivedSelector() {
-        if (activedSelector == null || choiceList.size() == 0)
+        if (activedSelector == null || this.selectors.size() == 0)
             return -1;
 
-        return choiceList.indexOf(activedSelector);
+        return this.selectors.indexOf(activedSelector);
     }
 }

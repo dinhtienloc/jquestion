@@ -12,9 +12,7 @@ public abstract class Question<T extends Item> extends RenderElement {
     protected boolean isPrintedResult = true;
     protected Answer answer;
 
-    public Question() {
-        registryListener();
-    }
+    public Question() {}
 
     public Question(boolean isPrintedResult) {
         this.isPrintedResult = isPrintedResult;
@@ -28,7 +26,6 @@ public abstract class Question<T extends Item> extends RenderElement {
         return isPrintedResult;
     }
 
-    protected abstract void registryListener();
     public abstract Answer prompt() throws IOException, ConsoleNotInitializeException;
 
     public Answer getAnswer() {

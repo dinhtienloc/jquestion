@@ -12,10 +12,6 @@ public class Selector {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public String getPrefix() {
         return prefix;
     }
