@@ -1,41 +1,36 @@
 package vn.locdt.jquestion.answer;
 
-import vn.locdt.jquestion.exception.UndefinedQuestionException;
 import vn.locdt.jquestion.element.item.Item;
+import vn.locdt.jquestion.element.question.Question;
+import vn.locdt.jquestion.exception.UndefinedQuestionException;
 
-public class Answer {
-    private Item sourceItem;
-    private String value;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
-    public Answer(Item sourceItem) throws UndefinedQuestionException {
-        if (sourceItem == null)
+public class Answer<T> {
+    private Question question;
+    private T result;
+
+    public Answer(Question question) throws UndefinedQuestionException {
+        if (question == null)
             throw new UndefinedQuestionException("Can't determine answer for undefined question.");
-        this.sourceItem = sourceItem;
-        this.value = "";
+        this.question = question;
     }
 
-    public Answer(Item sourceItem, String value) throws UndefinedQuestionException {
-        if (sourceItem == null)
-            throw new UndefinedQuestionException("Can't determine answer for undefined question.");
-
-        this.sourceItem = sourceItem;
-        this.value = value;
+    public T getResult() {
+        return result;
     }
 
-    public String getName() {
-        return sourceItem.getName();
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
+    public void setResult(T result) {
+        this.result = result;
     }
 
     @Override
     public String toString() {
-        return "{\""+ sourceItem.getName() + ":" + "\"" + value + "\"}";
+        if (result instanceof Collection) {
+            return ((Collection)result).stream()
+                    .collect(Collectors.joining(",", "[", "]")).toString();
+        }
+        else return result.toString();
     }
 }

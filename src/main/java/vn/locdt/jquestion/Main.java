@@ -1,7 +1,14 @@
 package vn.locdt.jquestion;
 
-import java.util.Arrays;
+import org.fusesource.jansi.AnsiConsole;
+import vn.locdt.jquestion.element.question.MultipleChoiceQuestion;
+import vn.locdt.jquestion.event.ChangeSelectorEvent;
+import vn.locdt.jquestion.event.ChooseSelectorEvent;
+import vn.locdt.jquestion.exception.ConsoleNotInitializeException;
+import vn.locdt.jquestion.listener.ChoiceListener;
 
+import java.io.IOException;
+import java.util.Arrays;
 
 
 public class Main {
@@ -20,37 +27,27 @@ public class Main {
     }
 
     public static void main(String[] args) {
-//        try {
-            String value = JQuestion.select("What do you want?", "want", getDatabaseTypes()).getValue();
-//            Map<String, String> resultMap = jQuestion.createQuestionGroup()
-//                .addInputQuestion("What is your grade?", "group")
-//                .addSingleChoiceQuestion(new SingleChoiceQuestion("What do you want?", "want")
-//                        .addSelectors("Candy", "Apple", "Nothing"))
-//                .prompt();
-
-//            Gson gson = new Gson();
-//            System.out.println(gson.toJson(resultMap));
-
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (ConsoleNotInitializeException e) {
-//            e.printStackTrace();
-//        }
+        try {
+//            JQuestion.input("What do you want")
+//                    .name("want")
+//                    .prompt();
+//
+//			JQuestion.confirm("What do you want")
+//					.name("want").prompt();
+//            JQuestion.singleChoice("What do you want")
+//                    .name("want")
+//                    .addSelector("Apple").addSelector("Banana", true)
+//                    .addSelectors("Kiwi", "Orange", "Pineapple")
+//                    .prompt();
+            JQuestion.multipleChoice("What do you want")
+                    .name("want")
+                    .addSelector("Apple").addActiveSelector("Banana", true)
+                    .addSelectors("Kiwi", "Orange", "Pineapple")
+					.prompt();
+        } catch (IOException | ConsoleNotInitializeException e) {
+            e.printStackTrace();
+        }
     }
+
 }
-////    public static void main(String[] args) {
-////        try {
-////            System.out.println("Test Console Reader");
-////            ConsoleReader console = new ConsoleReader();
-////            int key = 0;
-////            while(key != 3) {
-////                key = console.readCharacter();
-////                //key = cr.readVirtualKey();
-////                System.out.println(key);
-////            }
-////
-////        } catch(IOException e) {
-////            e.printStackTrace();
-////        }
-////    }
-//}
+
