@@ -1,43 +1,39 @@
 package vn.locdt.jquestion.element.question;
 
-import vn.locdt.jquestion.JQuestion;
-import vn.locdt.jquestion.answer.Answer;
-import vn.locdt.jquestion.event.NonBlockInputEvent;
-import vn.locdt.jquestion.exception.ConsoleNotInitializeException;
-import vn.locdt.jquestion.listener.NonBlockInputListener;
-import vn.locdt.jquestion.util.ConsoleUtils;
-
-import java.io.IOException;
+import org.jline.reader.LineReader;
+import vn.locdt.jquestion.util.CommonUtils;
 
 /**
  * Created by locdt on 1/10/2018.
  */
-public class ConfirmQuestion extends Question implements NonBlockInputListener {
+public class ConfirmQuestion extends BaseInputQuestion<Boolean> {
+    private String yes = "Y";
+    private String no = "N";
+
+    public ConfirmQuestion(LineReader reader, String title) {
+        super(reader, title);
+    }
+
+    public ConfirmQuestion yesLabel(String yes) {
+        this.yes = yes;
+        return this;
+    }
+
+    public ConfirmQuestion noLabel(String no) {
+        this.no = no;
+        return this;
+    }
 
     @Override
-    public Answer prompt() throws IOException, ConsoleNotInitializeException {
-        ConsoleUtils.renderQuestion(this);
-
-        // read input
-        int input;
-        boolean finished;
-        while (true) {
-            input = JQuestion.getConsole().readCharacter();
-            finished = onInput(new NonBlockInputEvent(input));
-            if (finished) break;
+    protected Boolean convertInput(String inputValue) {
+        if (CommonUtils.isNotEmpty(inputValue)) {
+            if (inputValue.equalsIgnoreCase(this.yes)) {
+                return true;
+            } else if (inputValue.equalsIgnoreCase(this.no)) {
+                return false;
+            }
         }
 
-        return this.answer;
-    }
-
-    private boolean handleInput(int charCode, NonBlockInputEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onInput(NonBlockInputEvent e) {
-        int charCode = e.getAddedChar();
-//            System.out.println(charCode);
-        return handleInput(charCode, e);
+        return null;
     }
 }

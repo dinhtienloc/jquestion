@@ -1,18 +1,16 @@
 package vn.locdt.jquestion.event;
 
-import vn.locdt.jquestion.constant.VirtualKey;
-
 public class NonBlockInputEvent {
-    protected final VirtualKey key;
+    protected final int addedChar;
 
     protected boolean stop;
 
-    public NonBlockInputEvent(VirtualKey key) {
-        this.key = key;
+    public NonBlockInputEvent(int addedChar) {
+        this.addedChar = addedChar;
     }
 
-    public VirtualKey getKey() {
-        return key;
+    public int getAddedChar() {
+        return addedChar;
     }
 
     public void stop() {

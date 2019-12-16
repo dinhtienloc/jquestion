@@ -1,52 +1,26 @@
 package vn.locdt.jquestion;
 
 import org.fusesource.jansi.AnsiConsole;
-import vn.locdt.jquestion.element.question.MultipleChoiceQuestion;
-import vn.locdt.jquestion.event.ChangeSelectorEvent;
-import vn.locdt.jquestion.event.ChooseSelectorEvent;
-import vn.locdt.jquestion.exception.ConsoleNotInitializeException;
-import vn.locdt.jquestion.listener.ChoiceListener;
+import org.jline.reader.LineReader;
+import org.jline.reader.LineReaderBuilder;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.nio.charset.Charset;
 
 
 public class Main {
-    public enum DBType {
-        MYSQL("MySQL"),
-        ORACLE("Oracle");
-        private String type;
-        DBType(String type) {
-            this.type = type;
-        }
-        public String getType() {return this.type;}
-    }
-
-    public static String[] getDatabaseTypes() {
-        return Arrays.stream(DBType.values()).map(DBType::getType).toArray(String[]::new);
-    }
-
-    public static void main(String[] args) {
-        try {
-//            JQuestion.input("What do you want")
-//                    .name("want")
-//                    .prompt();
-//
-//			JQuestion.confirm("What do you want")
-//					.name("want").prompt();
-//            JQuestion.singleChoice("What do you want")
-//                    .name("want")
-//                    .addSelector("Apple").addSelector("Banana", true)
-//                    .addSelectors("Kiwi", "Orange", "Pineapple")
-//                    .prompt();
-            JQuestion.multipleChoice("What do you want")
-                    .name("want")
-                    .addSelector("Apple").addActiveSelector("Banana", true)
-                    .addSelectors("Kiwi", "Orange", "Pineapple")
-					.prompt();
-        } catch (IOException | ConsoleNotInitializeException e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] args) throws IOException {
+        AnsiConsole.systemInstall();
+        Terminal terminal = TerminalBuilder.builder()
+                .system(true)
+                .dumb(false)
+                .encoding(Charset.forName("UTF-8"))
+                .jansi(true)
+                .build();
+        LineReader lr = LineReaderBuilder.builder().terminal(terminal).build();
+        JQuestion.select(lr, "test", new String[]{"a", "b", "c"}).prompt();
     }
 
 }

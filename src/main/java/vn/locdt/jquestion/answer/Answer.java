@@ -1,36 +1,34 @@
 package vn.locdt.jquestion.answer;
 
 import vn.locdt.jquestion.element.item.Item;
-import vn.locdt.jquestion.element.question.Question;
-import vn.locdt.jquestion.exception.UndefinedQuestionException;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
+public class Answer<V> {
+	private Item sourceItem;
+	private V value;
 
-public class Answer<T> {
-    private Question question;
-    private T result;
+	public Answer(Item sourceItem) {
+		this.sourceItem = sourceItem;
+	}
 
-    public Answer(Question question) throws UndefinedQuestionException {
-        if (question == null)
-            throw new UndefinedQuestionException("Can't determine answer for undefined question.");
-        this.question = question;
-    }
+	public Answer(Item sourceItem, V value) {
+		this.sourceItem = sourceItem;
+		this.value = value;
+	}
 
-    public T getResult() {
-        return result;
-    }
+	public String getName() {
+		return this.sourceItem.getName();
+	}
 
-    public void setResult(T result) {
-        this.result = result;
-    }
+	public V getValue() {
+		return this.value;
+	}
 
-    @Override
-    public String toString() {
-        if (result instanceof Collection) {
-            return ((Collection)result).stream()
-                    .collect(Collectors.joining(",", "[", "]")).toString();
-        }
-        else return result.toString();
-    }
+	public void setValue(V value) {
+		this.value = value;
+	}
+
+	@Override
+	public String toString() {
+		return "{\"" + this.sourceItem.getName() + ":" + "\"" + this.value + "\"}";
+	}
 }

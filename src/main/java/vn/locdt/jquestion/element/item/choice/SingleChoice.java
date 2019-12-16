@@ -1,4 +1,4 @@
-package vn.locdt.jquestion.element.item;
+package vn.locdt.jquestion.element.item.choice;
 
 public class SingleChoice extends Choice {
     private Selector activedSelector;

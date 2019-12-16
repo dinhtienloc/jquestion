@@ -1,4 +1,4 @@
-package vn.locdt.jquestion.element.item;
+package vn.locdt.jquestion.element.item.choice;
 
 import java.util.List;
 

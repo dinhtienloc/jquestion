@@ -1,4 +1,4 @@
-package vn.locdt.jquestion.element.item;
+package vn.locdt.jquestion.element.item.choice;
 
 public class Selector {
     private String prefix;

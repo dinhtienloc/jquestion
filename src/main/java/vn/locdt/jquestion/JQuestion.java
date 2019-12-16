@@ -1,50 +1,43 @@
 package vn.locdt.jquestion;
 
-import jline.console.ConsoleReader;
-import vn.locdt.jquestion.answer.Answer;
-import vn.locdt.jquestion.element.question.*;
-import vn.locdt.jquestion.exception.ConsoleNotInitializeException;
-import vn.locdt.jquestion.exception.ContainerNotInitializeException;
+import org.jline.reader.LineReader;
+import org.jline.terminal.Terminal;
+import org.jline.utils.NonBlockingReader;
+import vn.locdt.jquestion.element.question.ConfirmQuestion;
+import vn.locdt.jquestion.element.question.InputQuestion;
+import vn.locdt.jquestion.element.question.Question;
+import vn.locdt.jquestion.element.question.SingleChoiceQuestion;
 
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class JQuestion {
-    private static ConsoleReader console;
-    static {
-        try {
-            console = new ConsoleReader();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private static NonBlockingReader nonBlockingReader;
+
+    public static InputQuestion input(LineReader reader, String title) {
+        return new InputQuestion(reader, title);
     }
 
-    public static InputQuestion input(String title) {
-        return new InputQuestion(title);
+    public static SingleChoiceQuestion select(LineReader reader, String title, String[] selection) {
+        return new SingleChoiceQuestion(reader, title, null, selection);
     }
 
-    public static ConfirmQuestion confirm(String title) {
-        return new ConfirmQuestion(title);
+    public static SingleChoiceQuestion select(LineReader reader, String title, List<String> selection) {
+        return new SingleChoiceQuestion(reader, title, null, selection);
     }
 
-    public static MaskInputQuestion maskInput(String title) {
-        return new MaskInputQuestion(title);
+    public static Question confirm(LineReader reader, String title) {
+        return new ConfirmQuestion(reader, title);
+
     }
 
-    public static SingleChoiceQuestion singleChoice(String title) {
-        return new SingleChoiceQuestion(title);
+    public static NonBlockingReader startCharacterReader(LineReader reader) {
+        Terminal terminal = reader.getTerminal();
+        terminal.enterRawMode();
+        nonBlockingReader = terminal.reader();
+        return nonBlockingReader;
     }
 
-    public static MultipleChoiceQuestion multipleChoice(String title) {
-        return new MultipleChoiceQuestion(title);
-    }
-
-    public static ConsoleReader getConsole() throws ConsoleNotInitializeException {
-        if (console == null) throw new ConsoleNotInitializeException("Console is not initialized.");
-        return console;
+    public static void stopCharacterReader() {
+        nonBlockingReader = null;
     }
 }

@@ -1,8 +1,8 @@
 package vn.locdt.jquestion.event;
 
-import vn.locdt.jquestion.element.item.Selector;
+import vn.locdt.jquestion.element.item.choice.Selector;
 
-public class ChangeSelectorEvent extends ChoiceEvent {
+public class ChangeSelectorEvent {
     private Selector previousSelector;
     private Selector chosenSelector;
 

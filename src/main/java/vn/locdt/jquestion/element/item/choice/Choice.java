@@ -1,4 +1,6 @@
-package vn.locdt.jquestion.element.item;
+package vn.locdt.jquestion.element.item.choice;
+
+import vn.locdt.jquestion.element.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;
