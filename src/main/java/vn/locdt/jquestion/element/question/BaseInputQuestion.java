@@ -1,6 +1,7 @@
 package vn.locdt.jquestion.element.question;
 
 import org.jline.reader.LineReader;
+import org.jline.reader.impl.LineReaderImpl;
 import vn.locdt.jquestion.element.item.Input;
 import vn.locdt.jquestion.event.InputEvent;
 import vn.locdt.jquestion.listener.InputListener;

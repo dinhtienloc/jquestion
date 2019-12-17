@@ -1,7 +1,7 @@
 package vn.locdt.jquestion.util;
 
 
-import vn.locdt.jquestion.constant.VKConstants;
+import vn.locdt.jquestion.constant.VirtualKey;
 
 public class DetectArrowKey {
     public static boolean detecting = false; //1: Up, 2: Down, 3: Left, 4: Right
@@ -18,20 +18,20 @@ public class DetectArrowKey {
         DetectArrowKey.step = -1;
     }
 
-    public static VKConstants.ArrowKey update(int data) {
+    public static VirtualKey.ArrowKey update(int data) {
         DetectArrowKey.step++;
 
         if (DetectArrowKey.step == 2) {
             reset();
             switch (data) {
                 case 65:
-                    return VKConstants.ArrowKey.VK_UP;
+                    return VirtualKey.ArrowKey.UP;
                 case 66:
-                    return VKConstants.ArrowKey.VK_DOWN;
+                    return VirtualKey.ArrowKey.DOWN;
                 case 68:
-                    return VKConstants.ArrowKey.VK_LEFT;
+                    return VirtualKey.ArrowKey.LEFT;
                 case 67:
-                    return VKConstants.ArrowKey.VK_RIGHT;
+                    return VirtualKey.ArrowKey.RIGHT;
             }
         }
 

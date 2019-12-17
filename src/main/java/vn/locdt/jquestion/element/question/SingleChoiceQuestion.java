@@ -3,7 +3,7 @@ package vn.locdt.jquestion.element.question;
 import org.jline.reader.LineReader;
 import org.jline.utils.NonBlockingReader;
 import vn.locdt.jquestion.JQuestion;
-import vn.locdt.jquestion.constant.VKConstants;
+import vn.locdt.jquestion.constant.VirtualKey;
 import vn.locdt.jquestion.element.item.choice.Selector;
 import vn.locdt.jquestion.element.item.choice.SingleChoice;
 import vn.locdt.jquestion.event.ChangeSelectorEvent;
@@ -90,7 +90,8 @@ public class SingleChoiceQuestion extends Question<SingleChoice, String> impleme
 			// read input
 			int input;
 			boolean finished;
-			NonBlockingReader nonBlockingReader = JQuestion.startCharacterReader(this.lineReader);
+			JQuestion jQuestion = JQuestion.instance();
+			NonBlockingReader nonBlockingReader = jQuestion.startCharacterReader();
 
 			try {
 				do {
@@ -100,23 +101,24 @@ public class SingleChoiceQuestion extends Question<SingleChoice, String> impleme
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			JQuestion.stopCharacterReader();
+
+			jQuestion.stopCharacterReader();
 		}
 
 		return this.getValue();
 	}
 
-	private void changeActiveSelector(VKConstants.ArrowKey arrowKey) {
+	private void changeActiveSelector(VirtualKey.ArrowKey arrowKey) {
 		int cursor = this.item.indexOfActivedSelector();
 		Selector lastSelector = this.item.getActivedSelector();
 		Selector nextSelector;
 
 		List<Selector> selectors = this.item.getSelectors();
 		switch (arrowKey) {
-			case VK_UP:
+			case UP:
 				if (cursor > 0) cursor--;
 				break;
-			case VK_DOWN:
+			case DOWN:
 				if (cursor < selectors.size() - 1) cursor++;
 				break;
 		}
@@ -129,16 +131,16 @@ public class SingleChoiceQuestion extends Question<SingleChoice, String> impleme
 	}
 
 	protected boolean handleInput(int charCode, NonBlockInputEvent e) {
-		if (charCode == VKConstants.VK_ENTER) {
+		if (charCode == VirtualKey.ENTER) {
 			this.onChosen(new ChooseSelectorEvent(this.item.getActivedSelector()));
 			e.stop();
 		} else if (charCode == 27 && !DetectArrowKey.detecting) {
 			DetectArrowKey.detect();
 		} else if (DetectArrowKey.detecting) {
-			VKConstants.ArrowKey arrowKey = DetectArrowKey.update(charCode);
+			VirtualKey.ArrowKey arrowKey = DetectArrowKey.update(charCode);
 			if (arrowKey != null)
 				this.changeActiveSelector(arrowKey);
-		} else if (e.getAddedChar() == VKConstants.VK_CTRL_D) {
+		} else if (e.getAddedChar() == VirtualKey.EOF) {
 			e.stop();
 		} else if (ConsoleUtils.isWindowOS()) {
 			this.handleWindowInput(charCode, e);
@@ -148,19 +150,19 @@ public class SingleChoiceQuestion extends Question<SingleChoice, String> impleme
 	}
 
 	private void handleWindowInput(int charCode, NonBlockInputEvent e) {
-		VKConstants.ArrowKey arrowKey = null;
+		VirtualKey.ArrowKey arrowKey = null;
 		switch (charCode) {
-			case VKConstants.WindowOS.VK_DOWN:
-				arrowKey = VKConstants.ArrowKey.VK_DOWN;
+			case VirtualKey.WindowOS.DOWN:
+				arrowKey = VirtualKey.ArrowKey.DOWN;
 				break;
-			case VKConstants.WindowOS.VK_UP:
-				arrowKey = VKConstants.ArrowKey.VK_UP;
+			case VirtualKey.WindowOS.UP:
+				arrowKey = VirtualKey.ArrowKey.UP;
 				break;
-			case VKConstants.WindowOS.VK_LEFT:
-				arrowKey = VKConstants.ArrowKey.VK_LEFT;
+			case VirtualKey.WindowOS.LEFT:
+				arrowKey = VirtualKey.ArrowKey.LEFT;
 				break;
-			case VKConstants.WindowOS.VK_RIGHT:
-				arrowKey = VKConstants.ArrowKey.VK_RIGHT;
+			case VirtualKey.WindowOS.RIGHT:
+				arrowKey = VirtualKey.ArrowKey.RIGHT;
 				break;
 		}
 

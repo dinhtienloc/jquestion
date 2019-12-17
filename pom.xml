@@ -21,6 +21,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <jline.version>3.9.0</jline.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <dependencies>
@@ -52,7 +53,11 @@
             <version>${jline.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.fusesource.jansi/jansi -->
 <!--        <dependency>-->
 <!--            <groupId>org.fusesource.jansi</groupId>-->

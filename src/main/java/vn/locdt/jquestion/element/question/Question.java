@@ -24,6 +24,11 @@ public abstract class Question<T extends Item, V> extends RenderElement {
 		return this.item;
 	}
 
+	public Question<T, V> printResult(boolean isPrinted) {
+		this.isPrintedResult = isPrinted;
+		return this;
+	}
+
 	boolean isPrintedResult() {
 		return this.isPrintedResult;
 	}
