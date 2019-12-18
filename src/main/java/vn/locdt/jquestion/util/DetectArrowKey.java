@@ -6,7 +6,7 @@ import vn.locdt.jquestion.constant.VirtualKey;
 public class DetectArrowKey {
     public static boolean detecting = false; //1: Up, 2: Down, 3: Left, 4: Right
     private static int step = -1;
-    private static int[] arrowProcess = new int[]{27, 79};
+    private static int[] arrowProcess = new int[]{27, 91};
 
     public static void detect() {
         DetectArrowKey.detecting = true;
@@ -28,10 +28,10 @@ public class DetectArrowKey {
                     return VirtualKey.ArrowKey.UP;
                 case 66:
                     return VirtualKey.ArrowKey.DOWN;
-                case 68:
-                    return VirtualKey.ArrowKey.LEFT;
                 case 67:
                     return VirtualKey.ArrowKey.RIGHT;
+                case 68:
+                    return VirtualKey.ArrowKey.LEFT;
             }
         }
 

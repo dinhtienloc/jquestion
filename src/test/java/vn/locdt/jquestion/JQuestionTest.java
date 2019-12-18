@@ -6,6 +6,8 @@ import org.jline.terminal.Size;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.impl.AbstractWindowsTerminal;
 import org.junit.Before;
+import vn.locdt.jquestion.constant.VirtualKey;
+import vn.locdt.jquestion.constant.VirtualKey.ArrowKey;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -59,6 +61,15 @@ class JQuestionTest {
     static void processInput(char... inputs) throws IOException {
         for (char input : inputs) {
             terminal.processInputChar(input);
+        }
+    }
+
+    static void processInput(ArrowKey... arrowKeys) throws IOException {
+        for (ArrowKey arrowKey : arrowKeys) {
+            char[] chars = VirtualKey.getArrowCharCode(arrowKey);
+            if (chars != null) {
+                processInput(chars);
+            }
         }
     }
 }

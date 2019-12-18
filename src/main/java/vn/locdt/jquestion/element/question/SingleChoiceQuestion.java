@@ -13,6 +13,7 @@ import vn.locdt.jquestion.listener.ChoiceListener;
 import vn.locdt.jquestion.listener.NonBlockInputListener;
 import vn.locdt.jquestion.util.ConsoleUtils;
 import vn.locdt.jquestion.util.DetectArrowKey;
+import vn.locdt.jquestion.util.OsUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -96,6 +97,7 @@ public class SingleChoiceQuestion extends Question<SingleChoice, String> impleme
 			try {
 				do {
 					input = nonBlockingReader.read();
+//					System.out.println(input);
 					finished = this.onInput(new NonBlockInputEvent(input));
 				} while (!finished);
 			} catch (IOException e) {
@@ -142,7 +144,7 @@ public class SingleChoiceQuestion extends Question<SingleChoice, String> impleme
 				this.changeActiveSelector(arrowKey);
 		} else if (e.getAddedChar() == VirtualKey.EOF) {
 			e.stop();
-		} else if (ConsoleUtils.isWindowOS()) {
+		} else if (OsUtils.isWindowOS()) {
 			this.handleWindowInput(charCode, e);
 		}
 

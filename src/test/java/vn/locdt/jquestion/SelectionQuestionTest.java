@@ -1,7 +1,9 @@
 package vn.locdt.jquestion;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import vn.locdt.jquestion.constant.VirtualKey;
+import vn.locdt.jquestion.constant.VirtualKey.ArrowKey;
 import vn.locdt.jquestion.constant.VirtualKey.WindowOS;
 import vn.locdt.jquestion.element.question.SingleChoiceQuestion;
 
@@ -18,7 +20,8 @@ public class SelectionQuestionTest extends JQuestionTest {
         processInput(VirtualKey.ENTER);
         assertEquals("a", q.prompt());
 
-        processInput(WindowOS.DOWN, WindowOS.DOWN, VirtualKey.ENTER);
+        processInput(ArrowKey.DOWN, ArrowKey.DOWN);
+        processInput(VirtualKey.ENTER);
         assertEquals("c", q.prompt());
 
 

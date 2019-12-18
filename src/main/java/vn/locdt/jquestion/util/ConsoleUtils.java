@@ -14,7 +14,6 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 
 public class ConsoleUtils {
-	private final static String OS_NAME = System.getProperty("os.name");
 
 	public static String createTitle(String title) {
 		return ansi().fg(Ansi.Color.DEFAULT).bold().a(title).boldOff().fg(Color.WHITE).toString();
@@ -45,9 +44,5 @@ public class ConsoleUtils {
 				.a(createTitle(item.getTitle()))
 				.fg(Ansi.Color.GREEN).bold().a(" " + answer).boldOff()
 				.eraseScreen(Ansi.Erase.FORWARD).reset());
-	}
-
-	public static boolean isWindowOS() {
-		return OS_NAME.startsWith("Windows");
 	}
 }
